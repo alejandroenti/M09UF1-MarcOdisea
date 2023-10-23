@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class GameplayCamera : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject target;
-
-    [SerializeField]
-    private float targetDistance;
-
-    [SerializeField]
-    private float cameraLerp; //12f
+    [Header("Camera Movement Configuration")]
+    [SerializeField] private GameObject target;
+    [SerializeField] private float targetDistance;
+    [SerializeField] private float cameraLerp;
 
     private float rotationX;
     private float rotationY;
