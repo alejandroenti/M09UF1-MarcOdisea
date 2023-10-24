@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +8,7 @@ public class Input_Manager : MonoBehaviour
     private PlayerInputActions playerInputs;
 
     private Vector2 leftAxisValue = Vector2.zero;
+    private Vector2 rightAxisValue = Vector2.zero;
 
     private void Awake()
     {
@@ -25,9 +24,10 @@ public class Input_Manager : MonoBehaviour
 
             // Delegates
             playerInputs.Gameplay.Move.performed += LeftAxisUpdate;
+            playerInputs.Gameplay.RotateCamera.performed += RightAxisUpdate;
 
             _INPUT_MANAGER = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -38,8 +38,22 @@ public class Input_Manager : MonoBehaviour
 
     private void LeftAxisUpdate(InputAction.CallbackContext context)
     {
-        leftAxisValue = context.ReadValue<Vector2>();
-        Debug.Log("Magnitude: " + leftAxisValue.magnitude);
-        Debug.Log("Normalize: " + leftAxisValue.normalized);
+        this.leftAxisValue = context.ReadValue<Vector2>();
+    }
+
+    private void RightAxisUpdate(InputAction.CallbackContext context)
+    {
+        this.rightAxisValue = context.ReadValue<Vector2>();
+
+//        Debug.Log("Getter Right Axis : " + this.rightAxisValue);
+    }
+
+
+    public Vector2 GetLeftAxisValue() => this.leftAxisValue;
+
+    public Vector2 GetRightAxisValue()
+    {
+        Debug.Log("Getter Right Axis: " + this.rightAxisValue);
+        return this.rightAxisValue;
     }
 }
