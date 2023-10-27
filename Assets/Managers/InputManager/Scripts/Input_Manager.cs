@@ -44,16 +44,9 @@ public class Input_Manager : MonoBehaviour
     private void RightAxisUpdate(InputAction.CallbackContext context)
     {
         this.rightAxisValue = context.ReadValue<Vector2>();
-
-//        Debug.Log("Getter Right Axis : " + this.rightAxisValue);
     }
 
 
     public Vector2 GetLeftAxisValue() => this.leftAxisValue;
-
-    public Vector2 GetRightAxisValue()
-    {
-        Debug.Log("Getter Right Axis: " + this.rightAxisValue);
-        return this.rightAxisValue;
-    }
+    public Vector2 GetRightAxisValue() => this.rightAxisValue;
 }

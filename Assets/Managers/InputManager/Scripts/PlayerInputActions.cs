@@ -39,7 +39,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""RotateCamera"",
                     ""type"": ""PassThrough"",
-                    ""id"": ""b5b66688-24e3-4e6e-aa4c-1cf3cd4a6023"",
+                    ""id"": ""c8ce29cc-ca0b-4ce6-88de-800966969aca"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": ""NormalizeVector2"",
                     ""interactions"": """",
@@ -159,7 +159,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b251cf23-da7a-4ce0-8b45-39e997d524d2"",
+                    ""id"": ""a120a01c-3afb-46b8-ac5a-82d692b3c1cd"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -170,7 +170,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cc515795-e719-4aa4-8ffa-0e51c2d89a0d"",
+                    ""id"": ""689909d8-1ca5-410b-aa42-09d66fa51f79"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",

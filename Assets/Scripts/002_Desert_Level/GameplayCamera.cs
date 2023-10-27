@@ -19,16 +19,10 @@ public class GameplayCamera : MonoBehaviour
         //  En caso contrario, resetearemos la rotación a 0 para que pare de rotar
 
         // ROTATION X
-        if (Input_Manager._INPUT_MANAGER.GetRightAxisValue().y != 0.0f)
-        {
-            rotationX += Input_Manager._INPUT_MANAGER.GetRightAxisValue().y;
-        }
+        rotationX += Input_Manager._INPUT_MANAGER.GetRightAxisValue().y;
 
         // ROTATION Y
-        if (Input_Manager._INPUT_MANAGER.GetRightAxisValue().x != 0.0f)
-        {
-            rotationY += Input_Manager._INPUT_MANAGER.GetRightAxisValue().x;
-        }
+        rotationY += Input_Manager._INPUT_MANAGER.GetRightAxisValue().x;
 
         // Limitamos la rotación en el eje Y
         rotationX = Mathf.Clamp(rotationX, -50f, 50f);
@@ -46,7 +40,6 @@ public class GameplayCamera : MonoBehaviour
         if (Physics.Linecast(target.transform.position, finalPosition, out hit))
         {
             finalPosition = hit.point;
-            Debug.Log("Entro");
         }
             
 
