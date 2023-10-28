@@ -10,8 +10,10 @@ public class Input_Manager : MonoBehaviour
     private Vector2 leftAxisValue = Vector2.zero;
     private Vector2 rightAxisValue = Vector2.zero;
     private bool southButton = false;
+    private bool leftShoulder = false;
 
     private float southButtonTimer = 0.0f;
+    private float leftShoulderTimer = 0.0f;
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class Input_Manager : MonoBehaviour
             playerInputs.Gameplay.Move.performed += LeftAxisUpdate;
             playerInputs.Gameplay.RotateCamera.performed += RightAxisUpdate;
             playerInputs.Gameplay.Jump.performed += SouthButtonUpdate;
+            playerInputs.Gameplay.Crouch.performed += LeftShoulderUpdate;
 
             _INPUT_MANAGER = this;
             DontDestroyOnLoad(gameObject);
@@ -37,9 +40,12 @@ public class Input_Manager : MonoBehaviour
 
     private void Update()
     {
+        // Pasamos los booleanos a false y resetear el valor de estos
         this.southButton = false;
+        this.leftShoulder = false;
 
         this.southButtonTimer += Time.deltaTime;
+        this.leftShoulderTimer += Time.deltaTime;
 
         InputSystem.Update();
     }
@@ -60,9 +66,15 @@ public class Input_Manager : MonoBehaviour
         this.southButtonTimer = 0.0f;
     }
 
+    private void LeftShoulderUpdate(InputAction.CallbackContext context)
+    {
+        this.leftShoulder = true;
+    }
 
     public Vector2 GetLeftAxisValue() => this.leftAxisValue;
     public Vector2 GetRightAxisValue() => this.rightAxisValue;
     public bool GetButtonSouthValue() => this.southButton;
     public float GetButtonSouthTimer() => this.southButtonTimer;
+    public bool GetLeftShoulderValue() => this.leftShoulder;
+    public float GetLeftShoulderTimer() => this.leftShoulderTimer;
 }

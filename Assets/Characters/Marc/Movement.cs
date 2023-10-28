@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -11,6 +9,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float acceleration;
     [SerializeField] private float decceleration;
     [SerializeField] private float maxvelocityXZ = 5f;
+    [SerializeField] private float maxvelocityXZCrouching = 3f;
 
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 tmpDir = Vector3.zero;
@@ -18,11 +17,13 @@ public class Movement : MonoBehaviour
 
     private CharacterController controller;
     private Jump jumpScript;
+    private Crouch crouchScript;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         jumpScript = GetComponent<Jump>();
+        crouchScript = GetComponent<Crouch>();
     }
 
     private void Update()
@@ -47,7 +48,16 @@ public class Movement : MonoBehaviour
         }
 
         // Limitamos la velocidad a la máxima indicada en el inspector
-        velocityXZ = Mathf.Clamp(velocityXZ, 0f, maxvelocityXZ);
+        // Diferenciaremos entre la velocidad agachado o normal
+
+        if (crouchScript.GetIsCrouching())
+        {
+            velocityXZ = Mathf.Clamp(velocityXZ, 0f, maxvelocityXZCrouching);
+        }
+        else
+        {
+            velocityXZ = Mathf.Clamp(velocityXZ, 0f, maxvelocityXZ);
+        }
 
         //Calcular velocidad XZ
         finalVelocity.x = direction.x * velocityXZ;
@@ -58,5 +68,6 @@ public class Movement : MonoBehaviour
         controller.Move(finalVelocity * Time.deltaTime);
     }
 
-    public void ApplyGravity(float g) => finalVelocity.y = g;
+    public float GetVelocityXZ() => velocityXZ;
+    public float GetDecceleration() => decceleration;
 }
