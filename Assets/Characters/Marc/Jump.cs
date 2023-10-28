@@ -7,18 +7,19 @@ public class Jump : MonoBehaviour
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private float maxNextJumpTimer = 0.3f;
 
-    [Header("Set up gravity")]
+    [Header("Set up Gravity")]
     [SerializeField] private float gravity = 20f;
 
     private float directionY = -1f;
     private Vector3 finalVelocity = Vector3.zero;
     private List<float> forceAdded = new List<float>()
-                                     {1.0f, 1.2f, 1.3f};
+                                     {1.0f, 1.15f, 1.4f};
     private int jumpCount = 0;
-    private float alternativeJumpForce = 2.5f;
+    private float alternativeJumpForce = 2.0f;
     private float nextJumpTimer = 0.0f;
     // Pasando el ángulo en radianes
     private float longJumpAngle = 20f * Mathf.PI / 180;
+    private float mortalJumpAngle = 120f * Mathf.PI / 180;
 
     private CharacterController controller;
     private Crouch crouchScript;
@@ -48,7 +49,7 @@ public class Jump : MonoBehaviour
             //      el vector FORWARD del Character Controller
             //
             //      Revisamos si el jugador se encuentra agachado y su velocidad en XZ es igual a 0
-            //      Sólo le empuja la gravidad
+            //      Sólo le empuja la gravedad
             //      Lo empujaremos con la fuerza del TERCER SALTO con un ángulo de 100 grados (X negativa Y positiva)
             //      y haciendo la animación del mortal
             //
@@ -64,10 +65,15 @@ public class Jump : MonoBehaviour
                 {
                     if (movementScript.GetVelocityXZ() > 0)
                     {
-                        // DIRECTION = (FORWARD * COS(30) * FORCE) + (UP * SIN(30) * FORCE)
+                        // DIRECTION = (FORWARD * COS(20) * FORCE) + (UP * SIN(20) * FORCE)
                         Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(longJumpAngle) * jumpForce * alternativeJumpForce) + (controller.transform.up * Mathf.Sin(longJumpAngle) * jumpForce * alternativeJumpForce);
 
-                        Debug.Log(jumpDirection);
+                        finalVelocity = jumpDirection;
+                    }
+                    else if (movementScript.GetVelocityXZ() == 0)
+                    {
+                        // DIRECTION = (FORWARD * COS(120) * FORCE) + (UP * SIN(120) * FORCE)
+                        Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(mortalJumpAngle) * jumpForce * alternativeJumpForce) + (controller.transform.up * Mathf.Sin(mortalJumpAngle) * jumpForce * alternativeJumpForce);
 
                         finalVelocity = jumpDirection;
                     }
@@ -118,6 +124,7 @@ public class Jump : MonoBehaviour
         // y en el salto la velocidad en XZ es el doble casi
         finalVelocity.x -= movementScript.GetDecceleration() * 2 * Time.deltaTime;
         finalVelocity.z -= movementScript.GetDecceleration() * 2 * Time.deltaTime;
+
         finalVelocity.x = Mathf.Clamp(finalVelocity.x, 0f, finalVelocity.x);
         finalVelocity.z = Mathf.Clamp(finalVelocity.z, 0f, finalVelocity.z);
     }
