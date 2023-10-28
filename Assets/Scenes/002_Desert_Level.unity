@@ -14832,6 +14832,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Camera: {fileID: 1638853145}
+  acceleration: 5
+  decceleration: 7
+  maxvelocityXZ: 8
 --- !u!143 &1529360997
 CharacterController:
   m_ObjectHideFlags: 0
@@ -14856,7 +14859,7 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!4 &1535736516 stripped
 Transform:
