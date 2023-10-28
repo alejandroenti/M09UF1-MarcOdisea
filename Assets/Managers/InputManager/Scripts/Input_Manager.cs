@@ -9,6 +9,7 @@ public class Input_Manager : MonoBehaviour
 
     private Vector2 leftAxisValue = Vector2.zero;
     private Vector2 rightAxisValue = Vector2.zero;
+    private bool southButton = false;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class Input_Manager : MonoBehaviour
             // Delegates
             playerInputs.Gameplay.Move.performed += LeftAxisUpdate;
             playerInputs.Gameplay.RotateCamera.performed += RightAxisUpdate;
+            playerInputs.Gameplay.Jump.performed += SouthButtonUpdate;
 
             _INPUT_MANAGER = this;
             DontDestroyOnLoad(gameObject);
@@ -33,6 +35,8 @@ public class Input_Manager : MonoBehaviour
 
     private void Update()
     {
+        this.southButton = false;
+
         InputSystem.Update();
     }
 
@@ -46,7 +50,13 @@ public class Input_Manager : MonoBehaviour
         this.rightAxisValue = context.ReadValue<Vector2>();
     }
 
+    private void SouthButtonUpdate(InputAction.CallbackContext context)
+    {
+        this.southButton = true;
+    }
+
 
     public Vector2 GetLeftAxisValue() => this.leftAxisValue;
     public Vector2 GetRightAxisValue() => this.rightAxisValue;
+    public bool GetButtonSouthValue() => this.southButton;
 }

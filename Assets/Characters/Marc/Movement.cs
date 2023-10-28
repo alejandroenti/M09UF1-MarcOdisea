@@ -12,16 +12,17 @@ public class Movement : MonoBehaviour
     [SerializeField] private float decceleration;
     [SerializeField] private float maxvelocityXZ = 5f;
 
-    private CharacterController controller;
-
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 tmpDir = Vector3.zero;
     private float velocityXZ = 0f;
 
+    private CharacterController controller;
+    private Jump jumpScript;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        jumpScript = GetComponent<Jump>();
     }
 
     private void Update()
@@ -52,6 +53,10 @@ public class Movement : MonoBehaviour
         finalVelocity.x = direction.x * velocityXZ;
         finalVelocity.z = direction.z * velocityXZ;
 
+        finalVelocity.y = jumpScript.GetYVelocity();
+
         controller.Move(finalVelocity * Time.deltaTime);
     }
+
+    public void ApplyGravity(float g) => finalVelocity.y = g;
 }
