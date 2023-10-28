@@ -15,21 +15,25 @@ public class Jump : MonoBehaviour
     private List<float> forceAdded = new List<float>()
                                      {1.0f, 1.15f, 1.4f};
     private int jumpCount = 0;
-    private float alternativeJumpForce = 2.0f;
+    private float alternativeJumpForce = 1.65f;
     private float nextJumpTimer = 0.0f;
     // Pasando el ángulo en radianes
     private float longJumpAngle = 20f * Mathf.PI / 180;
-    private float mortalJumpAngle = 120f * Mathf.PI / 180;
+    private float mortalJumpAngle = 60f * Mathf.PI / 180;
+
+    private float accelerateZ;
 
     private CharacterController controller;
     private Crouch crouchScript;
     private Movement movementScript;
+    private WallDetect wallDetectScript;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         crouchScript = GetComponent<Crouch>();
         movementScript = GetComponent<Movement>();
+        wallDetectScript = GetComponent<WallDetect>();
     }
 
     private void Update()
@@ -65,26 +69,18 @@ public class Jump : MonoBehaviour
                 {
                     if (movementScript.GetVelocityXZ() > 0)
                     {
-                        // DIRECTION = (FORWARD * COS(20) * FORCE) + (UP * SIN(20) * FORCE)
-                        Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(longJumpAngle) * jumpForce * alternativeJumpForce) + (controller.transform.up * Mathf.Sin(longJumpAngle) * jumpForce * alternativeJumpForce);
-
-                        finalVelocity = jumpDirection;
+                        LongJump();
                     }
                     else if (movementScript.GetVelocityXZ() == 0)
                     {
-                        // DIRECTION = (FORWARD * COS(120) * FORCE) + (UP * SIN(120) * FORCE)
-                        Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(mortalJumpAngle) * jumpForce * alternativeJumpForce) + (controller.transform.up * Mathf.Sin(mortalJumpAngle) * jumpForce * alternativeJumpForce);
-
-                        finalVelocity = jumpDirection;
+                        MortalJump();
                     }
 
                 }
                 else
                 {
-                    if ((Input_Manager._INPUT_MANAGER.GetButtonSouthTimer() <= maxNextJumpTimer || nextJumpTimer <= maxNextJumpTimer))
+                    if (nextJumpTimer <= maxNextJumpTimer)
                     {
-                        jumpCount++;
-
                         if (jumpCount >= forceAdded.Count)
                         {
                             jumpCount = 0;
@@ -97,18 +93,51 @@ public class Jump : MonoBehaviour
                     }
 
                     finalVelocity.y = jumpForce * forceAdded[jumpCount];
+                    nextJumpTimer = 0f;
+                    jumpCount++;
                 }
             }
             else
             {
+                Debug.Log("Ento ELSE GetSouthButton");
                 finalVelocity.y = direction.y * gravity * Time.deltaTime;
                 DeccelerateXZ();
             }
         }
         else
         {
+            // SI nos encontramos en el aire y estamos en contacto con una pared de frente (FORWARD)
+            // al pusar el BUTTON SOUTH o el SPACE, haremos un salto en dirreción contraria
+            // en un águlo de 60 grados negativos
+            // (120 grados, 90 + 30 en dirección contraria, mismo COS y SIN). MISMO ÁNGULO QUE MORTAL JUMP
+
             finalVelocity.y += direction.y * gravity * Time.deltaTime;
-            DeccelerateXZ();
+            
+
+            if (Input_Manager._INPUT_MANAGER.GetButtonSouthValue())
+            {
+
+                if (wallDetectScript.GetIsOnWall())
+                {
+                    //BackJump();
+                    Debug.Log("Walljumping");
+                }
+                else if (Input_Manager._INPUT_MANAGER.GetButtonSouthTimer() <= maxNextJumpTimer)
+                {
+                    nextJumpTimer = 0f;
+                }
+            }
+            Debug.Log("Ento ELSE isGrounded");
+
+            if (finalVelocity.y > 0 && accelerateZ != 0f)
+            {
+                finalVelocity.z += movementScript.GetAcceleration() * Time.deltaTime;
+                finalVelocity.z = Mathf.Clamp(finalVelocity.z, 0f, accelerateZ);
+            }
+            else
+            {
+                DeccelerateXZ();
+            }
         }
 
         //Aplicamos gravedad calculada sobre el cuerpo
@@ -120,12 +149,36 @@ public class Jump : MonoBehaviour
     private void DeccelerateXZ()
     {
         // Vamos decelerando al jugador
-        // Multiplicamos por 2 la deceleración ya que el número que tenemos en el movimiento lo tenemos bien controlado
-        // y en el salto la velocidad en XZ es el doble casi
-        finalVelocity.x -= movementScript.GetDecceleration() * 2 * Time.deltaTime;
-        finalVelocity.z -= movementScript.GetDecceleration() * 2 * Time.deltaTime;
+        finalVelocity.x -= movementScript.GetDecceleration() * Time.deltaTime;
+        finalVelocity.z -= movementScript.GetDecceleration() * Time.deltaTime;
 
         finalVelocity.x = Mathf.Clamp(finalVelocity.x, 0f, finalVelocity.x);
         finalVelocity.z = Mathf.Clamp(finalVelocity.z, 0f, finalVelocity.z);
+
+        accelerateZ = 0.0f;
+    }
+
+    private void LongJump()
+    {
+        // DIRECTION = (FORWARD * COS(20) * FORCE) + (UP * SIN(20) * FORCE)
+        Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(longJumpAngle)) + (controller.transform.up * Mathf.Sin(longJumpAngle));
+        jumpDirection.Normalize();
+        jumpDirection *= jumpForce * alternativeJumpForce;
+
+        finalVelocity = jumpDirection;
+    }
+
+    private void MortalJump()
+    {
+        // DIRECTION = (FORWARD * COS(60) * -1 * FORCE) + (UP * SIN(60) * FORCE)
+        Vector3 jumpDirection = (controller.transform.forward * -1f *  Mathf.Cos(mortalJumpAngle)) + (controller.transform.up * Mathf.Sin(mortalJumpAngle));
+
+        jumpDirection.Normalize();
+        //Debug.Log(jumpDirection);
+        accelerateZ = jumpDirection.z * jumpForce * alternativeJumpForce;
+        jumpDirection.y *= jumpForce * alternativeJumpForce;
+        Debug.Log(jumpDirection);
+
+        finalVelocity = jumpDirection;
     }
 }

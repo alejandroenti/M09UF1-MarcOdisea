@@ -70,4 +70,5 @@ public class Movement : MonoBehaviour
 
     public float GetVelocityXZ() => velocityXZ;
     public float GetDecceleration() => decceleration;
+    public float GetAcceleration() => acceleration;
 }
