@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float decceleration;
     [SerializeField] private float maxvelocityXZ = 5f;
     [SerializeField] private float maxvelocityXZCrouching = 3f;
+    [SerializeField, Range(2.0f, 10.0f)] private float rotationSpeed;
 
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 tmpDir = Vector3.zero;
@@ -59,6 +60,12 @@ public class Movement : MonoBehaviour
         {
             velocityXZ = Mathf.Clamp(velocityXZ, 0f, maxvelocityXZ);
         }
+
+        // Calculamos y aplicamos la rotación del personaje
+        Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+        gameObject.transform.forward = direction;
 
         //Calcular velocidad XZ
         finalVelocity.x = direction.x * velocityXZ;
