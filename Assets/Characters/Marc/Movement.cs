@@ -28,6 +28,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+
         //Calcular direccion XZ
         Vector3 direction = Quaternion.Euler(0f, m_Camera.transform.eulerAngles.y, 0f) * new Vector3(Input_Manager._INPUT_MANAGER.GetLeftAxisValue().x, 0f, Input_Manager._INPUT_MANAGER.GetLeftAxisValue().y);
         direction.Normalize();

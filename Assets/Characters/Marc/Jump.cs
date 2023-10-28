@@ -20,6 +20,7 @@ public class Jump : MonoBehaviour
     // Pasando el ángulo en radianes
     private float longJumpAngle = 20f * Mathf.PI / 180;
     private float mortalJumpAngle = 60f * Mathf.PI / 180;
+    private float wallJumpAngle = 45f * Mathf.PI / 180;
 
     private float accelerateZ;
 
@@ -106,20 +107,18 @@ public class Jump : MonoBehaviour
         }
         else
         {
+            finalVelocity.y += direction.y * gravity * Time.deltaTime;
+
             // SI nos encontramos en el aire y estamos en contacto con una pared de frente (FORWARD)
             // al pusar el BUTTON SOUTH o el SPACE, haremos un salto en dirreción contraria
-            // en un águlo de 60 grados negativos
-            // (120 grados, 90 + 30 en dirección contraria, mismo COS y SIN). MISMO ÁNGULO QUE MORTAL JUMP
-
-            finalVelocity.y += direction.y * gravity * Time.deltaTime;
-            
+            // en un águlo de 45 grados
 
             if (Input_Manager._INPUT_MANAGER.GetButtonSouthValue())
             {
 
                 if (wallDetectScript.GetIsOnWall())
                 {
-                    //BackJump();
+                    WallJump();
                     Debug.Log("Walljumping");
                 }
                 else if (Input_Manager._INPUT_MANAGER.GetButtonSouthTimer() <= maxNextJumpTimer)
@@ -133,10 +132,6 @@ public class Jump : MonoBehaviour
             {
                 finalVelocity.z += movementScript.GetAcceleration() * Time.deltaTime;
                 finalVelocity.z = Mathf.Clamp(finalVelocity.z, 0f, accelerateZ);
-            }
-            else
-            {
-                DeccelerateXZ();
             }
         }
 
@@ -163,6 +158,7 @@ public class Jump : MonoBehaviour
         // DIRECTION = (FORWARD * COS(20) * FORCE) + (UP * SIN(20) * FORCE)
         Vector3 jumpDirection = (controller.transform.forward * Mathf.Cos(longJumpAngle)) + (controller.transform.up * Mathf.Sin(longJumpAngle));
         jumpDirection.Normalize();
+        
         jumpDirection *= jumpForce * alternativeJumpForce;
 
         finalVelocity = jumpDirection;
@@ -171,13 +167,23 @@ public class Jump : MonoBehaviour
     private void MortalJump()
     {
         // DIRECTION = (FORWARD * COS(60) * -1 * FORCE) + (UP * SIN(60) * FORCE)
-        Vector3 jumpDirection = (controller.transform.forward * -1f *  Mathf.Cos(mortalJumpAngle)) + (controller.transform.up * Mathf.Sin(mortalJumpAngle));
-
+        Vector3 jumpDirection = (controller.transform.forward * -1f *  Mathf.Cos(wallJumpAngle)) + (controller.transform.up * Mathf.Sin(wallJumpAngle));
         jumpDirection.Normalize();
-        //Debug.Log(jumpDirection);
+
         accelerateZ = jumpDirection.z * jumpForce * alternativeJumpForce;
         jumpDirection.y *= jumpForce * alternativeJumpForce;
-        Debug.Log(jumpDirection);
+
+        finalVelocity = jumpDirection;
+    }
+
+    private void WallJump()
+    {
+        // DIRECTION = (FORWARD * COS(45) * -1 * FORCE) + (UP * SIN(45) * FORCE)
+        Vector3 jumpDirection = (controller.transform.forward * -1f * Mathf.Cos(mortalJumpAngle)) + (controller.transform.up * Mathf.Sin(mortalJumpAngle));
+        jumpDirection.Normalize();
+        
+        accelerateZ = jumpDirection.z * jumpForce * alternativeJumpForce;
+        jumpDirection.y *= jumpForce * alternativeJumpForce;
 
         finalVelocity = jumpDirection;
     }
