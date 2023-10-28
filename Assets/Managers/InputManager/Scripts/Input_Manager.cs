@@ -11,6 +11,8 @@ public class Input_Manager : MonoBehaviour
     private Vector2 rightAxisValue = Vector2.zero;
     private bool southButton = false;
 
+    private float southButtonTimer = 0.0f;
+
     private void Awake()
     {
         if (_INPUT_MANAGER != null && _INPUT_MANAGER != this)
@@ -37,6 +39,8 @@ public class Input_Manager : MonoBehaviour
     {
         this.southButton = false;
 
+        this.southButtonTimer += Time.deltaTime;
+
         InputSystem.Update();
     }
 
@@ -53,10 +57,12 @@ public class Input_Manager : MonoBehaviour
     private void SouthButtonUpdate(InputAction.CallbackContext context)
     {
         this.southButton = true;
+        this.southButtonTimer = 0.0f;
     }
 
 
     public Vector2 GetLeftAxisValue() => this.leftAxisValue;
     public Vector2 GetRightAxisValue() => this.rightAxisValue;
     public bool GetButtonSouthValue() => this.southButton;
+    public float GetButtonSouthTimer() => this.southButtonTimer;
 }
