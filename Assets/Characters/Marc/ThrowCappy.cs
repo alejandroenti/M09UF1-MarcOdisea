@@ -26,7 +26,7 @@ public class ThrowCappy : MonoBehaviour
             canThrowCappy = false;
             spawnPosition = transform.position;
             spawnPosition.x += controller.radius * 2;
-            spawnPosition.y -= controller.radius;
+            spawnPosition.y += controller.radius;
             spawnPosition.z += controller.radius * 2;
             GameObject temp = Instantiate(cappy, spawnPosition, transform.rotation);
         }
