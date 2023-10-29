@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114000013971332034}
   - component: {fileID: 571215699131581844}
   - component: {fileID: 592012275647361854}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SoftStar
   m_TagString: Wall
   m_Icon: {fileID: 0}
