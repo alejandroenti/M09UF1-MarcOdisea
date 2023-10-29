@@ -29,10 +29,18 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+        Vector3 direction = Vector3.zero;
 
-        //Calcular direccion XZ
-        Vector3 direction = Quaternion.Euler(0f, m_Camera.transform.eulerAngles.y, 0f) * new Vector3(Input_Manager._INPUT_MANAGER.GetLeftAxisValue().x, 0f, Input_Manager._INPUT_MANAGER.GetLeftAxisValue().y);
-        direction.Normalize();
+        if (!jumpScript.GetIsWallJumping())
+        {
+            //Calcular direccion XZ
+            direction = Quaternion.Euler(0f, m_Camera.transform.eulerAngles.y, 0f) * new Vector3(Input_Manager._INPUT_MANAGER.GetLeftAxisValue().x, 0f, Input_Manager._INPUT_MANAGER.GetLeftAxisValue().y);
+            direction.Normalize();
+        }
+        else
+        {
+            velocityXZ = 0f;
+        }
 
         // Calcular la aceleración en XZ
         // Nos guardamos la direccíón en la que estábamos yendo para
@@ -43,7 +51,7 @@ public class Movement : MonoBehaviour
             velocityXZ += acceleration * Time.deltaTime;
             tmpDir = direction;
         }
-        else
+        else if (!jumpScript.GetIsWallJumping())
         {
             velocityXZ -= decceleration * Time.deltaTime;
             direction = tmpDir;

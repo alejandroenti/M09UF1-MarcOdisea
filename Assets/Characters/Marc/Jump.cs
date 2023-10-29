@@ -23,6 +23,8 @@ public class Jump : MonoBehaviour
     private float wallJumpAngle = 45f * Mathf.PI / 180;
 
     private float accelerateZ;
+    
+    private bool isWallJumping = false;
 
     private CharacterController controller;
     private Crouch crouchScript;
@@ -102,6 +104,7 @@ public class Jump : MonoBehaviour
             {
                 finalVelocity.y = direction.y * gravity * Time.deltaTime;
                 DeccelerateXZ();
+                isWallJumping = false;
             }
         }
         else
@@ -118,6 +121,7 @@ public class Jump : MonoBehaviour
                 if (wallDetectScript.GetIsOnWall())
                 {
                     WallJump();
+                    isWallJumping = true;
                 }
                 else if (Input_Manager._INPUT_MANAGER.GetButtonSouthTimer() <= maxNextJumpTimer)
                 {
@@ -138,6 +142,7 @@ public class Jump : MonoBehaviour
 
     public float GetYVelocity() => finalVelocity.y;
     public void SetFinalVelocity(Vector3 vel) => finalVelocity = vel;
+    public bool GetIsWallJumping() => isWallJumping;
 
     private void DeccelerateXZ()
     {
@@ -179,9 +184,15 @@ public class Jump : MonoBehaviour
         // DIRECTION = (FORWARD * COS(45) * -1 * FORCE) + (UP * SIN(45) * FORCE)
         Vector3 jumpDirection = (controller.transform.forward * -1f * Mathf.Cos(mortalJumpAngle)) + (controller.transform.up * Mathf.Sin(mortalJumpAngle));
         jumpDirection.Normalize();
-        
+
         accelerateZ = jumpDirection.z * jumpForce * alternativeJumpForce;
         jumpDirection.y *= jumpForce * alternativeJumpForce;
+
+        // Calculamos y aplicamos la rotación del personaje
+        Quaternion rotation = Quaternion.LookRotation(jumpDirection, Vector3.up);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, accelerateZ * Time.deltaTime);
+        this.transform.forward = jumpDirection;
 
         finalVelocity = jumpDirection;
     }
