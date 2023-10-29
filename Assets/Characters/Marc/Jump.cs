@@ -185,14 +185,11 @@ public class Jump : MonoBehaviour
         Vector3 jumpDirection = (controller.transform.forward * -1f * Mathf.Cos(mortalJumpAngle)) + (controller.transform.up * Mathf.Sin(mortalJumpAngle));
         jumpDirection.Normalize();
 
+        // Calculamos la rotación del personaje
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180f, transform.eulerAngles.z);
+
         accelerateZ = jumpDirection.z * jumpForce * alternativeJumpForce;
         jumpDirection.y *= jumpForce * alternativeJumpForce;
-
-        // Calculamos y aplicamos la rotación del personaje
-        Quaternion rotation = Quaternion.LookRotation(jumpDirection, Vector3.up);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, accelerateZ * Time.deltaTime);
-        this.transform.forward = jumpDirection;
 
         finalVelocity = jumpDirection;
     }
