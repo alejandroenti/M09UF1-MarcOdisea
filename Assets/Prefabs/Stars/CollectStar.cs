@@ -5,10 +5,29 @@ using UnityEngine;
 public class CollectStar : MonoBehaviour
 {
     private GameObject target;
+    private AudioSource audioSource;
+
+    private float timeToDestroy = 0.25f;
+    private float timerToDestroy = 0f;
+    private bool hasToBeDestroyed = false;
 
     private void Awake()
     {
         target = GameObject.FindGameObjectWithTag("Player");
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Update()
+    {
+        if (hasToBeDestroyed)
+        {
+            timerToDestroy += Time.deltaTime;
+
+            if (timerToDestroy >= timeToDestroy)
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -17,7 +36,8 @@ public class CollectStar : MonoBehaviour
         {
             // Añadimos punto al LevelManage
             Level_Manager._LEVEL_MANAGER.AppendStar();
-            Destroy(this.gameObject);
+            audioSource.Play();
+            hasToBeDestroyed = true;
         }
     }
 }

@@ -16,8 +16,6 @@ public class Level_Manager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Current Starts: " + currentStars);
-
         if (currentStars >= numStars)
         {
             GameManager._GAME_MANAGER.LevelPassed();
