@@ -5,6 +5,6 @@ public class PlayerDie : MonoBehaviour
 {
     public void Die()
     {
-        SceneManager.LoadScene(0);
+        GameManager._GAME_MANAGER.PlayerHasDied();
     }
 }

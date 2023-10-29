@@ -119,9 +119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea4c6a599c0ba3046886ee9cc2b17e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementMaxSpped: 0.5
+  movementMaxSpped: 0.2
   movementAcceleration: 3
-  movementDistance: 15
+  movementDistance: 8
   angularMaxSpeed: 10
   angularAcceleration: 5
   target: {fileID: 919132149155446097, guid: 6f3c5a5d5bb5f3a40912258652b9f1b8, type: 3}

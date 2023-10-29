@@ -15,7 +15,8 @@ public class CollectStar : MonoBehaviour
     {
         if (other.gameObject == target)
         {
-            // Añadimos punto al LevelManager
+            // Añadimos punto al LevelManage
+            //Level_Manager._LEVEL_MANAGER.AppendStar();
             Destroy(this.gameObject);
         }
     }
