@@ -100,7 +100,6 @@ public class Jump : MonoBehaviour
             }
             else
             {
-                Debug.Log("Ento ELSE GetSouthButton");
                 finalVelocity.y = direction.y * gravity * Time.deltaTime;
                 DeccelerateXZ();
             }
@@ -119,14 +118,12 @@ public class Jump : MonoBehaviour
                 if (wallDetectScript.GetIsOnWall())
                 {
                     WallJump();
-                    Debug.Log("Walljumping");
                 }
                 else if (Input_Manager._INPUT_MANAGER.GetButtonSouthTimer() <= maxNextJumpTimer)
                 {
                     nextJumpTimer = 0f;
                 }
             }
-            Debug.Log("Ento ELSE isGrounded");
 
             if (finalVelocity.y > 0 && accelerateZ != 0f)
             {
@@ -140,6 +137,7 @@ public class Jump : MonoBehaviour
     }
 
     public float GetYVelocity() => finalVelocity.y;
+    public void SetFinalVelocity(Vector3 vel) => finalVelocity = vel;
 
     private void DeccelerateXZ()
     {

@@ -33,13 +33,22 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Cappy",
+                    "type": "Button",
+                    "id": "cf79b98f-2b92-4598-81be-186f20bf726c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "RotateCamera",
                     "type": "PassThrough",
                     "id": "c8ce29cc-ca0b-4ce6-88de-800966969aca",
                     "expectedControlType": "Vector2",
                     "processors": "NormalizeVector2",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -216,6 +225,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ac1fbf7-009a-4ae5-aeda-c072fc1373af",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cappy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc434245-410e-495e-8d92-e5194a3b89d2",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cappy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

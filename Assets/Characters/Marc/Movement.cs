@@ -65,7 +65,7 @@ public class Movement : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
-        gameObject.transform.forward = direction;
+        this.transform.forward = direction;
 
         //Calcular velocidad XZ
         finalVelocity.x = direction.x * velocityXZ;
