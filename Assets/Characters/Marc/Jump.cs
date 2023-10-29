@@ -15,8 +15,10 @@ public class Jump : MonoBehaviour
     private List<float> forceAdded = new List<float>()
                                      {1.0f, 1.15f, 1.4f};
     private int jumpCount = 0;
+    private bool isJumping = false;
     private float alternativeJumpForce = 1.65f;
     private float nextJumpTimer = 0.0f;
+
     // Pasando el ángulo en radianes
     private float longJumpAngle = 20f * Mathf.PI / 180;
     private float mortalJumpAngle = 60f * Mathf.PI / 180;
@@ -82,6 +84,8 @@ public class Jump : MonoBehaviour
                 }
                 else
                 {
+                    jumpCount++;
+
                     if (nextJumpTimer <= maxNextJumpTimer)
                     {
                         if (jumpCount >= forceAdded.Count)
@@ -97,18 +101,22 @@ public class Jump : MonoBehaviour
 
                     finalVelocity.y = jumpForce * forceAdded[jumpCount];
                     nextJumpTimer = 0f;
-                    jumpCount++;
                 }
+
+                isJumping = true;
             }
             else
             {
                 finalVelocity.y = direction.y * gravity * Time.deltaTime;
                 DeccelerateXZ();
                 isWallJumping = false;
+                isJumping = false;
             }
         }
         else
         {
+            isJumping = false;
+
             finalVelocity.y += direction.y * gravity * Time.deltaTime;
 
             // SI nos encontramos en el aire y estamos en contacto con una pared de frente (FORWARD)
@@ -143,6 +151,8 @@ public class Jump : MonoBehaviour
     public float GetYVelocity() => finalVelocity.y;
     public void SetFinalVelocity(Vector3 vel) => finalVelocity = vel;
     public bool GetIsWallJumping() => isWallJumping;
+    public int GetJumpCount() => jumpCount;
+    public bool GetIsJumping() => isJumping;
 
     private void DeccelerateXZ()
     {
