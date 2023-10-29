@@ -7,11 +7,13 @@ public class CappyRebound : MonoBehaviour
 
     private GameObject target;
     private CappyMovement cappyMovementScript;
+    ReboundAction reboundScript;
 
     private void Awake()
     {
         target = GameObject.FindGameObjectWithTag("Player");
         cappyMovementScript = GetComponent<CappyMovement>();
+        reboundScript = target.GetComponent<ReboundAction>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,7 +22,6 @@ public class CappyRebound : MonoBehaviour
         {
             if (other.gameObject == target)
             {
-                ReboundAction reboundScript = target.GetComponent<ReboundAction>();
                 reboundScript.Rebound(transform.up, reboundForce);
                 cappyMovementScript.SetIsComingBack();
             }
